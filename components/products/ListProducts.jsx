@@ -7,7 +7,7 @@ import ProductItem from './ProductItem';
 import CustomPagination from '../layouts/CustomPagination';
 
 const ListProducts = ({ data }) => {
-    console.log(data)
+    // console.log(data)
     return (<>
         <section className="py-12">
             <div className="container max-w-screen-xl mx-auto px-4">
