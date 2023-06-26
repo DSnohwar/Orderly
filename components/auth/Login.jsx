@@ -1,20 +1,41 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 import Link from "next/link";
+import { signIn } from 'next-auth/react'
+import { toast } from 'react-toastify'
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+    const router=useRouter();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        
+        const data = await signIn("credentials",{
+            email,
+            password,
+            redirect:false,
+        });
+
+        console.log("---------------------------");
+        console.log(data);
+        console.log("---------------------------");
+        if(data?.error){
+            toast.error(data?.error)
+        }
+        if(data?.ok)
+        {
+            router.push("/");
+        }
     }
     return (
         <div
             style={{ maxWidth: "480px" }}
             className="mt-10 mb-20 p-4 md:p-7 mx-auto rounded bg-white shadow-lg"
         >
-            <form>
+            <form onSubmit={submitHandler}>
                 <h2 className="mb-5 text-2xl font-semibold">Login</h2>
 
                 <div className="mb-4">
