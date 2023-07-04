@@ -11,6 +11,8 @@ import AuthContext from '@/context/AuthContext';
 const Header = () => {
   const { user, setUser } = useContext(AuthContext);
   const { data } = useSession();
+  console.log(user);
+
   useEffect(() => {
     if (data) {
       setUser(data?.user);
