@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import Sidebar from "../layouts/Sidebar";
 
@@ -18,6 +18,13 @@ const NewAddress = () => {
     const [zipCode, setZipCode] = useState("");
     const [phoneNo, setPhonoNo] = useState("");
     const [country, setCountry] = useState("");
+``
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+            clearErrors();
+        }
+    }, [error]);
 
     const submitHandler = (e) => {
         e.preventDefault();
