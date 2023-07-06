@@ -5,27 +5,36 @@ import CartContext from "@/context/CartContext";
 import Link from "next/link";
 
 const Cart = () => {
-    const { addToCart, cart, deleteFromCart} = useContext(CartContext);
-    const increaseQty=(cartItem)=> {
-        const newQty=cartItem?.quantity + 1;
-        const item= {...cartItem , quantity: newQty};
-        if(newQty > cartItem?.stock) return
+    const { addToCart, cart, deleteFromCart, saveOnCheckout } = useContext(CartContext);
+    const increaseQty = (cartItem) => {
+        const newQty = cartItem?.quantity + 1;
+        const item = { ...cartItem, quantity: newQty };
+        if (newQty > cartItem?.stock) return
         addToCart(item);
 
     }
-    const decreaseQty=(cartItem)=> {
-        const newQty=cartItem?.quantity - 1;
-        const item= {...cartItem , quantity: newQty};
-        if(newQty <=0) return
+    const decreaseQty = (cartItem) => {
+        const newQty = cartItem?.quantity - 1;
+        const item = { ...cartItem, quantity: newQty };
+        if (newQty <= 0) return
         addToCart(item);
     };
-    const removeHandler=(id)=>{
+    const removeHandler = (id) => {
         deleteFromCart(id);
     };
-    const totalPriceWithoutTax = Number(cart?.cartItems?.reduce((acc,item)=>acc + (item.price*item.quantity),0)).toFixed(2);
-    const totalTaxAmount = Number((totalPriceWithoutTax*0.18)).toFixed(2);
+    const totalPriceWithoutTax = Number(cart?.cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0)).toFixed(2);
+    const totalTaxAmount = Number((totalPriceWithoutTax * 0.18)).toFixed(2);
     const totalPriceWithTax = Number(Number(totalPriceWithoutTax) + Number(totalTaxAmount)).toFixed(2);
 
+    const checkoutHandler = () => {
+        const data = {
+            amount: totalPriceWithoutTax,
+            tax: totalTaxAmount,
+            totalAmount:totalPriceWithTax,
+        };
+
+        saveOnCheckout(data);
+    };
     return (
         <>
             <section className="py-5 sm:py-7 bg-blue-100">
@@ -65,13 +74,13 @@ const Cart = () => {
                                                         <button
                                                             data-action="decrement"
                                                             className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none"
-                                                            onClick={()=>decreaseQty(cartItem)}
+                                                            onClick={() => decreaseQty(cartItem)}
                                                         >
                                                             <span className="m-auto text-2xl font-thin">−</span>
                                                         </button>
                                                         <input
                                                             type="number"
-                                                            className="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-900  outline-none custom-input-number"
+                                                            className="focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-900  outline-none custom-input-number"
                                                             name="custom-input-number"
                                                             value={cartItem.quantity}
                                                             readOnly
@@ -79,7 +88,7 @@ const Cart = () => {
                                                         <button
                                                             data-action="increment"
                                                             className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
-                                                            onClick={()=>increaseQty(cartItem)}
+                                                            onClick={() => increaseQty(cartItem)}
                                                         >
                                                             <span className="m-auto text-2xl font-thin">+</span>
                                                         </button>
@@ -97,7 +106,7 @@ const Cart = () => {
                                                 <div className="flex-auto">
                                                     <div className="float-right">
                                                         <a className="px-4 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
-                                                            onClick={()=>removeHandler(cartItem?.product)}
+                                                            onClick={() => removeHandler(cartItem?.product)}
                                                         >
                                                             Remove
                                                         </a>
@@ -120,7 +129,7 @@ const Cart = () => {
                                         </li>
                                         <li className="flex justify-between text-gray-600  mb-1">
                                             <span>Total Units:</span>
-                                            <span className="text-green-500">{cart?.cartItems?.reduce((acc,item)=>acc + (item.quantity),0).toFixed(0)} (Units)</span>
+                                            <span className="text-green-500">{cart?.cartItems?.reduce((acc, item) => acc + (item.quantity), 0).toFixed(0)} (Units)</span>
                                         </li>
                                         <li className="flex justify-between text-gray-600  mb-1">
                                             <span>TAX:</span>
@@ -132,7 +141,9 @@ const Cart = () => {
                                         </li>
                                     </ul>
 
-                                    <a className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer">
+                                    <a className="px-4 py-3 mb-2 inline-block text-lg w-full text-center font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 cursor-pointer"
+                                        onClick={checkoutHandler}
+                                    >
                                         Continue
                                     </a>
 

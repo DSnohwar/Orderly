@@ -17,7 +17,7 @@ const getProducts = async ({ searchParams }) => {
   const searchQuery = queryString.stringify(urlparams);
   console.log(searchQuery)
 
-  const { data } = await axios.get(`${process.env.API_URL}/api/products?${searchQuery}`)
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products?${searchQuery}`)
   return data;
 
 };

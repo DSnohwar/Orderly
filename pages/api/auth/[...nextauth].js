@@ -1,57 +1,66 @@
-import NextAuth from "next-auth/next";
-import CredentialsProvider  from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 import User from "@/backend/models/user";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import dbConnect from "@/backend/config/dbConnect";
 
-export default async function auth(req,res){
-    return await NextAuth(req,res,{
-        session:{
-            strategy: "jwt",
+export default async function auth(req, res) {
+  return await NextAuth(req, res, {
+    session: {
+      strategy: "jwt",
+    },
+    providers: [
+      CredentialsProvider({
+        async authorize(credentials, req) {
+          dbConnect();
+
+          const { email, password } = credentials;
+
+          const user = await User.findOne({ email }).select("+password");
+
+          if (!user) {
+            throw new Error("Invalid Email or Password");
+          }
+
+          const isPasswordMatched = await bcrypt.compare(
+            password,
+            user.password
+          );
+
+          if (!isPasswordMatched) {
+            throw new Error("Invalid Email or Password");
+          }
+
+          return user;
         },
-        providers: [
-            CredentialsProvider({
-                async authorize(credentials,req){
-                    dbConnect();
-                    const {email , password} =credentials;
-                    const user=await User.findOne({email}).select("+password");
-                    if(!user)
-                    {
-                        throw new Error("Invalid Email or Password"); 
-                    }
-                    const isPasswordMatched = await bcrypt.compare(password,user.password);
-                    if(!isPasswordMatched)
-                    {
-                        throw new Error("Invalid Email or Password");
-                    }
-                    return user;
-                },
-            })
-        ],
+      }),
+    ],
+    callbacks: {
+      jwt: async ({ token, user }) => {
+        user && (token.user = user);
 
-        callbacks : {
-            jwt : async({ token, user}) => {
-                user && (token.user=user);
+        if (req.url === "/api/auth/session?update") {
+          // hit the db and eturn the updated user
 
-                return token;
-            },
-            session : async({ session, token })=> {
-                session.user = token.user; 
+          const updatedUser = await User.findById(token.user._id);
+          token.user = updatedUser;
+        }
 
-                //to delete password from session
-                delete session?.user?.password;
+        return token;
+      },
+      session: async ({ session, token }) => {
+        session.user = token.user;
 
-                return session;
-            },
+        // delete password from session
+        delete session?.user?.password;
 
-        },
-        pages: {
-            signIn: "/login",
-        },
-        secret: process.env.NEXTAUTH_SECRET ,
-
-
-
-    })
+        return session;
+      },
+    },
+    pages: {
+      signIn: "/login",
+    },
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 }
-

@@ -1,8 +1,8 @@
-import Profile from "@/components/auth/Profile";
 import axios from "axios";
 import React from "react";
 
 import { cookies } from "next/headers";
+import Shipping from "@/components/cart/Shipping";
 
 const getAddresses = async () => {
   const nextCookies = cookies();
@@ -18,10 +18,10 @@ const getAddresses = async () => {
   return data?.addresses;
 };
 
-const ProfilePage = async () => {
+const ShippingPage = async () => {
   const addresses = await getAddresses();
 
-  return <Profile addresses={addresses} />;
+  return <Shipping addresses={addresses} />;
 };
 
-export default ProfilePage;
+export default ShippingPage;

@@ -27,17 +27,17 @@ const Header = () => {
         <div className="flex flex-wrap items-center">
           <div className="flex-shrink-0 mr-5">
             <a href="/">
-              <Image
+              <img
                 src="/images/logo1.jpg"
                 height="40"
                 width="120"
-                alt="BuyItNow"
+                alt="Orderly"
               />
             </a>
           </div>
           <Search />
 
-          <div className="flex items-center space-x-2 ml-auto">
+          <div className="flex items-center space-x-2 ml-auto ">
             <Link
               href="/cart"
               className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
@@ -58,7 +58,9 @@ const Header = () => {
             ) : (
               <Link href="/me">
                 <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                  <img className="w-10 h-10 rounded-full" src={user?.avatar ? user?.avatar : "/images/default.png"} />
+                  <img className="w-10 h-10 rounded-full" src={
+                    user?.avatar ? user?.avatar.url : "/images/default.png"
+                  } />
                   <div className="space-y-1 font-medium">
                     <p>
                       {user?.name}

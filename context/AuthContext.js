@@ -9,14 +9,16 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
   const [updated, setUpdated] = useState(false);
+  const [passwordupdated, setpasswordUpdated] = useState(false);
 
   const router = useRouter();
 
   const registerUser = async ({ name, email, password }) => {
     try {
       const { data } = await axios.post(
-        `${process.env.API_URL}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
           name,
           email,
@@ -32,10 +34,70 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loadUser = async () => {
+    try {
+      setLoading(true);
+
+      const { data } = await axios.get("/api/auth/session?update");
+
+      if (data?.user) {
+        setUser(data.user);
+        router.replace("/me");
+      }
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
+
+  const updateProfile = async (formData) => {
+    try {
+      setLoading(true);
+
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (data?.user) {
+        loadUser();
+        setUpdated(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error?.response?.data?.message);
+    }
+  };
+
+  const updatePassword = async ({ currentPassword, newPassword }) => {
+    try {
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update_password`,
+        {
+          currentPassword,
+          newPassword,
+        }
+      );
+
+      if (data?.success) {
+        setpasswordUpdated(true);
+        router.push("/me");
+      }
+    } catch (error) {
+      console.log(error.response);
+      setError(error?.response?.data?.message);
+    }
+  };
+
   const addNewAddress = async (address) => {
     try {
       const { data } = await axios.post(
-        `${process.env.API_URL}/api/address`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address`,
         address
       );
 
@@ -50,7 +112,7 @@ export const AuthProvider = ({ children }) => {
   const updateAddress = async (id, address) => {
     try {
       const { data } = await axios.put(
-        `${process.env.API_URL}/api/address/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`,
         address
       );
 
@@ -66,7 +128,7 @@ export const AuthProvider = ({ children }) => {
   const deleteAddress = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${process.env.API_URL}/api/address/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`
       );
 
       if (data?.success) {
@@ -86,10 +148,15 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         error,
+        loading,
         updated,
+        passwordupdated,
+        setpasswordUpdated,
         setUpdated,
         setUser,
         registerUser,
+        updateProfile,
+        updatePassword,
         addNewAddress,
         updateAddress,
         deleteAddress,

@@ -10,7 +10,7 @@ const getAddress = async (id) => { //this is a protected api route too , gets th
 
   const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
 
-  const { data } = await axios.get(`${process.env.API_URL}/api/address/${id}`, {
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`, {
     headers: {
       Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
     },

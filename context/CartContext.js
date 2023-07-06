@@ -8,7 +8,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [cart, setcart] = useState([]);
 
-    const router = useRouter
+    const router = useRouter();
     useEffect(() => {
         setCartToState()
     }, [])
@@ -51,6 +51,20 @@ export const CartProvider = ({ children }) => {
         localStorage.setItem("cart", JSON.stringify({ cartItems: newCartitems }))
         setCartToState();
     };
+
+    const saveOnCheckout = ({ amount, tax, totalAmount }) => {
+        const checkoutInfo = {
+            amount,
+            tax,
+            totalAmount,
+        };
+
+        const newCart = { ...cart, checkoutInfo };
+
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        setCartToState();
+        router.push("/shipping");
+    };
     return (
         <CartContext.Provider
             value={
@@ -58,6 +72,7 @@ export const CartProvider = ({ children }) => {
                     cart,
                     addToCart,
                     deleteFromCart,
+                    saveOnCheckout,
 
                 }
             }
