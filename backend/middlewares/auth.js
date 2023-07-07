@@ -3,9 +3,8 @@ import ErrorHandler from "../utils/errorHandler";
 
 const isAuthenticatedUser = async (req, res, next) => {
   const session = await getSession({ req });
-  console.log(session);
+
   if (!session) {
-    console.log("Session not found 401 error coming");
     return next(new ErrorHandler("Login first to access this route", 401));
   }
 
@@ -14,4 +13,18 @@ const isAuthenticatedUser = async (req, res, next) => {
   next();
 };
 
-export { isAuthenticatedUser };
+const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler(
+          `Role (${req.user.role}) is not allowed to access this resource.`
+        )
+      );
+    }
+
+    next();
+  };
+};
+
+export { isAuthenticatedUser, authorizeRoles };

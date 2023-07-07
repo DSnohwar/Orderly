@@ -125,7 +125,7 @@ const Cart = () => {
                                     <ul className="mb-5">
                                         <li className="flex justify-between text-gray-600  mb-1">
                                             <span>Amount Before Tax:</span>
-                                            <span>{totalPriceWithoutTax}</span>
+                                            <span>${totalPriceWithoutTax}</span>
                                         </li>
                                         <li className="flex justify-between text-gray-600  mb-1">
                                             <span>Total Units:</span>
@@ -133,11 +133,11 @@ const Cart = () => {
                                         </li>
                                         <li className="flex justify-between text-gray-600  mb-1">
                                             <span>TAX:</span>
-                                            <span>{totalTaxAmount}</span>
+                                            <span>${totalTaxAmount}</span>
                                         </li>
                                         <li className="text-lg font-bold border-t flex justify-between mt-3 pt-3">
                                             <span>Total price:</span>
-                                            <span>{totalPriceWithTax}</span>
+                                            <span>${totalPriceWithTax}</span>
                                         </li>
                                     </ul>
 

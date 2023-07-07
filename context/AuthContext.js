@@ -160,7 +160,6 @@ export const AuthProvider = ({ children }) => {
         addNewAddress,
         updateAddress,
         deleteAddress,
-
         clearErrors,
       }}
     >
