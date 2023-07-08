@@ -3,16 +3,24 @@ import Image from 'next/image';
 import React, { use, useRef } from 'react'
 import StarRatings from 'react-star-ratings'
 import BreadCrumbs from '../layouts/BreadCrumbs';
-import { useContext } from 'react';
+import { useContext,useEffect } from 'react';
 import CartContext from '@/context/CartContext';
+import NewReview from '../review/NewReview';
+import OrderContext from '@/context/OrderContext';
+import Reviews from '../review/Reviews';
 
 const ProductDetails = ({ product }) => {
-    const {addToCart} = useContext(CartContext) 
+    const { addToCart } = useContext(CartContext)
+    const { canUserReview, canReview } = useContext(OrderContext);
     const imgRef = useRef(null);
     const setImagePrev = (url) => {
         imgRef.current.src = url;
 
     };
+
+    useEffect(() => {
+        canUserReview(product?._id);
+    }, []);
     const inStock = product?.stock >= 1;
 
     const breadCrumbs = [
@@ -22,7 +30,7 @@ const ProductDetails = ({ product }) => {
             url: `/product/${product?._id}`,
         },
     ];
-    const addToCartHandler= ()=>{
+    const addToCartHandler = () => {
         addToCart({
             product: product._id,
             name: product.name,
@@ -102,8 +110,8 @@ const ProductDetails = ({ product }) => {
 
                             <div className="flex flex-wrap gap-2 mb-5">
                                 <button className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                                onClick={addToCartHandler}
-                                disabled={!inStock}
+                                    onClick={addToCartHandler}
+                                    disabled={!inStock}
                                 >
                                     <i className="fa fa-shopping-cart mr-2"></i>
                                     Add to cart
@@ -136,14 +144,14 @@ const ProductDetails = ({ product }) => {
                         </main>
                     </div>
 
-                    {/* <NewReview /> */}
+                    {canReview && <NewReview product={product} />}
                     <hr />
 
                     <div className="font-semibold">
                         <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl">
                             Other Customers Reviews
                         </h1>
-                        {/* <Reviews /> */}
+                        <Reviews reviews={product?.reviews}/>
                     </div>
                 </div>
             </section>

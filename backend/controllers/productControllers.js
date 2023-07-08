@@ -14,13 +14,12 @@ export const newProduct = async (req, res, next) => {
 };
 
 export const getProducts = async (req, res, next) => {
-  const resPerPage = 2;
+  const resPerPage = 3;
   const productsCount = await Product.countDocuments();
 
   const apiFilters = new APIFilters(Product.find(), req.query)
     .search()
     .filter();
-
   let products = await apiFilters.query;
   const filteredProductsCount = products.length;
 
@@ -83,7 +82,7 @@ export const updateProduct = async (req, res, next) => {
   if (!product) {
     return next(new ErrorHandler("Product not found.", 404));
   }
-//updating product details
+  //updating product details
   product = await Product.findByIdAndUpdate(req.query.id, req.body);
 
   res.status(200).json({
@@ -105,6 +104,53 @@ export const deleteProduct = async (req, res, next) => {
   }
 
   await product.deleteOne();
+
+  res.status(200).json({
+    success: true,
+  });
+};
+
+export const createProductReview = async (req, res, next) => {
+  const { rating, comment, productId, userName, userAvatar } = req.body;
+
+  const review = {
+    user: req?.user?._id,
+    rating: Number(rating),
+    comment,
+    userName,        // Add the user's name to the review
+    userAvatar,
+  };
+  console.log("-------------------------")
+  console.log(productId)
+  console.log("-------------------------")
+
+  let product = await Product.findById(productId);
+
+
+  if (!product) {
+    return next(new ErrorHandler("Product not found.", 404));
+  }
+
+  const isReviewed = product?.reviews?.find((r) => r.user.toString() === req?.user._id.toString());
+  console.log("-------------------------")
+  console.log(isReviewed)
+  console.log("-------------------------")
+  if (isReviewed) {
+    product?.reviews.forEach((review) => {
+      if (review?.user.toString() === req?.user._id.toString()) {
+        review.comment = comment;
+        review.rating = rating;
+      }
+    });
+  } else {
+    product?.reviews.push(review);
+  }
+
+  product.ratings =
+    product?.reviews?.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await product?.save();
 
   res.status(200).json({
     success: true,

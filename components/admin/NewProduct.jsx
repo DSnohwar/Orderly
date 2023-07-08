@@ -22,7 +22,7 @@ const NewProduct = () => {
     };
 
     const categories = [
-        "Electronics",
+        'Electronics',
         "Cameras",
         "Laptops",
         "Accessories",
