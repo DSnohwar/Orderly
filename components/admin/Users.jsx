@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
 import Link from "next/link";
+import React, { useContext, useEffect } from "react";
 import CustomPagination from "../layouts/CustomPagination";
-import ProductContext from "@/context/ProductContext";
+import AuthContext from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
+const Users = ({ data }) => {
 
-const Products = ({ data }) => {
-  const { deleteProduct, error, clearErrors } = useContext(ProductContext);
+    console.log(data)
+  const { error, deleteUser, clearErrors } = useContext(AuthContext);
 
   useEffect(() => {
     if (error) {
@@ -18,12 +19,13 @@ const Products = ({ data }) => {
   }, [error]);
 
   const deleteHandler = (id) => {
-    deleteProduct(id);
+    deleteUser(id);
   };
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <h1 className="text-3xl my-5 ml-4 font-bold">
-        {data?.productsCount} Products
+        {data?.usersCount} Users
       </h1>
       <table className="w-full text-sm text-left">
         <thead className="text-l text-gray-700 uppercase">
@@ -32,10 +34,10 @@ const Products = ({ data }) => {
               Name
             </th>
             <th scope="col" className="px-6 py-3">
-              Stock
+              Email
             </th>
             <th scope="col" className="px-6 py-3">
-              Price
+              Role
             </th>
             <th scope="col" className="px-6 py-3">
               Actions
@@ -43,30 +45,22 @@ const Products = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.products?.map((product) => (
-            <tr className="bg-white">
-              <td className="px-6 py-2"><Link href={`/product/${product._id}`} className="hover:text-blue-600">
-                {product.name}
-              </Link></td>
-              <td className="px-6 py-2">{product?.stock}</td>
-              <td className="px-6 py-2">${product?.price}</td>
+          {data?.users?.map((user) => (
+            <tr key={user?._id} className="bg-white">
+              <td className="px-6 py-2">{user?.name}</td>
+              <td className="px-6 py-2">{user?.email}</td>
+              <td className="px-6 py-2">{user?.role}</td>
               <td className="px-6 py-2">
                 <div>
                   <Link
-                    href={`/admin/products/${product?._id}/upload_images`}
-                    className="px-2 py-2 inline-block text-green-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
-                  >
-                    <i className="fa fa-image" aria-hidden="true"></i>
-                  </Link>
-
-                  <Link
-                    href={`/admin/products/${product?._id}`}
+                    href={`/admin/users/${user?._id}`}
                     className="px-2 py-2 inline-block text-yellow-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer mr-2"
                   >
                     <i className="fa fa-pencil" aria-hidden="true"></i>
                   </Link>
-                  <a className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
-                    onClick={() => deleteHandler(product?._id)}
+                  <a
+                    className="px-2 py-2 inline-block text-red-600 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 cursor-pointer"
+                    onClick={() => deleteHandler(user?._id)}
                   >
                     <i className="fa fa-trash" aria-hidden="true"></i>
                   </a>
@@ -79,11 +73,11 @@ const Products = ({ data }) => {
       <div className="mb-6">
         <CustomPagination
           resPerPage={data?.resPerPage}
-          productsCount={data?.filteredProductsCount}
+          productsCount={data?.usersCount}
         />
       </div>
     </div>
   );
 };
 
-export default Products;
+export default Users;
