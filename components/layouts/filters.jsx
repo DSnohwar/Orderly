@@ -8,6 +8,7 @@ const Filters = () => {
   const [min, setmin] = useState('')
   const [max, setmax] = useState('')
   let queryParams;
+  
   function handleClick(checkbox) { // function to handle checkboxes click and add their value to query Params
     if (typeof window !== "undefined") {
       queryParams = new URLSearchParams(window.location.search);

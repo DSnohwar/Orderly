@@ -35,6 +35,9 @@ export default async function auth(req, res) {
           return user;
         },
       }),
+
+      //adding google oAuth
+      
     ],
     callbacks: {
       jwt: async ({ token, user }) => {

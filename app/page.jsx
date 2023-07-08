@@ -2,8 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import ListProducts from '@/components/products/ListProducts'
 import queryString from 'query-string';
-import Search from '@/components/layouts/Search';
-import CustomPagination from '@/components/layouts/CustomPagination';
 
 const getProducts = async ({ searchParams }) => {
   const urlparams = {
@@ -15,8 +13,6 @@ const getProducts = async ({ searchParams }) => {
     "price[lte]": searchParams.max,
   };
   const searchQuery = queryString.stringify(urlparams);
-  console.log(searchQuery)
-
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products?${searchQuery}`)
   return data;
 

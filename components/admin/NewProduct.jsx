@@ -12,10 +12,10 @@ const NewProduct = () => {
         seller: "",
         price: "",
         stock: "",
-        category: "",
+        category: "Electronics",
     });
 
-    const { name, description, seller, price, stock, category } = product;
+    const { name, description, seller, price, stock, category, } = product;
 
     const onChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
@@ -92,7 +92,7 @@ const NewProduct = () => {
                             <select
                                 className="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
                                 name="category"
-                                // value={category}
+                                value={category}
                                 onChange={onChange}
                                 required
                             >

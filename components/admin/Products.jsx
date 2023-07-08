@@ -44,7 +44,7 @@ const Products = ({ data }) => {
         </thead>
         <tbody>
           {data?.products?.map((product) => (
-            <tr className="bg-white">
+              <tr key={product?._id} className="bg-white">
               <td className="px-6 py-2"><Link href={`/product/${product._id}`} className="hover:text-blue-600">
                 {product.name}
               </Link></td>

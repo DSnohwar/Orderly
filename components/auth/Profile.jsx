@@ -1,11 +1,8 @@
 'use client'
-import React, { useContext,useEffect } from 'react'
+import React, { useContext,} from 'react'
 import Link from 'next/link';
 import UserAddresses from "../user/UserAddress";
-import Sidebar from '../layouts/Sidebar';
 import AuthContext from '@/context/AuthContext';
-import { toast } from "react-toastify";
-
 const Profile = ({ addresses }) => {
     const { user } = useContext(AuthContext);
     return (

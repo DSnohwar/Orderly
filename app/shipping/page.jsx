@@ -6,12 +6,12 @@ import Shipping from "@/components/cart/Shipping";
 
 const getAddresses = async () => {
   const nextCookies = cookies();
-
-  const nextAuthSessionToken = nextCookies.get("next-auth.session-token");
+  const cookieName = getCookieName();
+  const nextAuthSessionToken = nextCookies.get(cookieName);
 
   const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/address`, {
     headers: {
-      Cookie: `next-auth.session-token=${nextAuthSessionToken?.value}`,
+      Cookie: `${nextAuthSessionToken?.name}=${nextAuthSessionToken?.value}`,
     },
   });
 
