@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const registerUser = async ({ name, email, password }) => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        `/api/auth/register`,
         {
           name,
           email,
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
 
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update`,
+        `/api/auth/me/update`,
         formData,
         {
           headers: {
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   const updatePassword = async ({ currentPassword, newPassword }) => {
     try {
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/me/update_password`,
+        `/api/auth/me/update_password`,
         {
           currentPassword,
           newPassword,
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   const updateUser = async (id, userData) => {
     try {
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users/${id}`,
+        `/api/admin/users/${id}`,
         {
           userData,
         }
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
   const deleteUser = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/users/${id}`
+        `/api/admin/users/${id}`
       );
 
       if (data?.success) {
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
   const addNewAddress = async (address) => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/address`,
+        `/api/address`,
         address
       );
 
@@ -144,7 +144,7 @@ export const AuthProvider = ({ children }) => {
   const updateAddress = async (id, address) => {
     try {
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`,
+        `/api/address/${id}`,
         address
       );
 
@@ -160,7 +160,7 @@ export const AuthProvider = ({ children }) => {
   const deleteAddress = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/address/${id}`
+        `np/api/address/${id}`
       );
 
       if (data?.success) {

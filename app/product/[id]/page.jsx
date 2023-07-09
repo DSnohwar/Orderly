@@ -14,7 +14,7 @@ const ProductDetailsPage = async ({ params }) => {
 
   if (!isValidId) {
     return redirect("/");
-  }
+  }  
   const product = await getProductDetails(params.id);
   console.log(product);
 

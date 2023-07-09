@@ -31,7 +31,7 @@ export const OrderProvider = ({ children }) => {
   const deleteOrder = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/orders/${id}`
+        `/api/admin/orders/${id}`
       );
 
       if (data?.success) {
@@ -45,7 +45,7 @@ export const OrderProvider = ({ children }) => {
   const canUserReview = async (id) => {
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/can_review?productId=${id}`
+        `/api/orders/can_review?productId=${id}`
       );
 
       if (data?.canReview) {

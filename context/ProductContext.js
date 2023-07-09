@@ -16,7 +16,7 @@ export const ProductProvider = ({ children }) => {
   const newProduct = async (product) => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`,
+        `/api/admin/products`,
         product
       );
 
@@ -31,7 +31,7 @@ export const ProductProvider = ({ children }) => {
   const updateProduct = async (product, id) => {
     try {
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${id}`,
+        `/api/admin/products/${id}`,
         product
       );
 
@@ -47,7 +47,7 @@ export const ProductProvider = ({ children }) => {
   const deleteProduct = async (id) => {
     try {
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/${id}`
+        `/api/admin/products/${id}`
       );
 
       if (data?.success) {
@@ -63,7 +63,7 @@ export const ProductProvider = ({ children }) => {
       setLoading(true);
 
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/products/upload_images/${id}`,
+        `/api/admin/products/upload_images/${id}`,
         formData,
         {
           headers: {
@@ -88,7 +88,7 @@ export const ProductProvider = ({ children }) => {
   console.log(reviewData)
   console.log("-------------------------")
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/review`,
+        `/api/products/review`,
         reviewData
       );
 
